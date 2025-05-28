@@ -20,6 +20,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
@@ -57,4 +58,5 @@ class UserController extends Controller
         $user->delete();
         return response()->json(['message' => 'Usuario eliminado']);
     }
+    
 }
