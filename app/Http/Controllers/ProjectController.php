@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class ProjectController extends Controller
 {
     public function index()
     {
         $projects = Project::with('creator')->orderBy('last_used_at', 'desc')->get();
-        return view('projects.index', compact('projects'));
+        $users = User::all();
+        return view('projects.index', compact('projects', 'users'));
     }
 
     public function show(Project $project)

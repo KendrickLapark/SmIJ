@@ -11,8 +11,13 @@ class Task extends Model
         'user_id',
         'title',
         'description',
-        'start_time',
-        'end_time',
+        'start_datetime',
+        'end_datetime',
+    ];
+
+    protected $casts = [
+        'start_datetime' => 'datetime',
+        'end_datetime' => 'datetime',
     ];
 
     // Relación con Project

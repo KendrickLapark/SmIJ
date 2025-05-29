@@ -439,6 +439,22 @@ return [
                 ],
             ],
         ],
+
+        'Fullcalendar' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/fullcalendar/main.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/fullcalendar/main.min.js',
+                ],
+            ],
+        ],
     ],
 
     /*
