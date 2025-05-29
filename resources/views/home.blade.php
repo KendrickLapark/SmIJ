@@ -7,14 +7,12 @@
 @stop
 
 @section('content')
-    <p>Welcome to admin panel.</p>
+    <p>Bienvenido al panel de administrador.</p>
 @stop
 
 @section('css')
-    {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
 @stop
 
 @section('js')
-    <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
+    <script> console.log("Hola, estoy usando AdminLTE"); </script>
 @stop

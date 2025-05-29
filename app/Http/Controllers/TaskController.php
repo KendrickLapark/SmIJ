@@ -48,4 +48,19 @@ class TaskController extends Controller
         return response()->json(['message' => 'Tarea creada', 'task' => $task]);
     }
 
+    public function update(Request $request, Task $task)
+    {
+        $request->validate([
+            'start_datetime' => 'required|date',
+            'end_datetime' => 'nullable|date|after_or_equal:start_datetime',
+        ]);
+
+        $task->update([
+            'start_datetime' => $request->start_datetime,
+            'end_datetime' => $request->end_datetime,
+        ]);
+
+        return response()->json(['message' => 'Tarea actualizada']);
+    }
+
 }

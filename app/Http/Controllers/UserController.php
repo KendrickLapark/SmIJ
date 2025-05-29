@@ -58,5 +58,18 @@ class UserController extends Controller
         $user->delete();
         return response()->json(['message' => 'Usuario eliminado']);
     }
+
+    public function projects($userId)
+    {
+        $user = User::find($userId);
+        if (!$user) {
+            return response()->json([], 404);
+        }
+
+        // Suponiendo que el modelo User tiene relación projects()
+        $projects = $user->projects()->select('id', 'name')->get();
+
+        return response()->json($projects);
+    }
     
 }
