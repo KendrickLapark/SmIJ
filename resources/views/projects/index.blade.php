@@ -21,77 +21,63 @@
         </div>
     </div>
 
-    <div style="width: 100%; height: 100vh; wire:background-color: lightblue;">
-
+    <div style="width: 100%; height: 100vh; background-color: lightblue;">
         <h3>Calendario de Tareas</h3>
         <div id="calendar"></div>
-        
     </div>
+
     <!-- Modal para añadir proyecto -->
     <div class="modal fade" id="projectModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <form id="projectForm" class="modal-content">
-          @csrf
-          <div class="modal-header">
-            <h5 class="modal-title">Nuevo Proyecto</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <input type="text" name="name" id="projectName" class="form-control" placeholder="Nombre del proyecto" required>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Guardar</button>
-          </div>
-        </form>
-      </div>
+        <div class="modal-dialog">
+            <form id="projectForm" class="modal-content">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Nuevo Proyecto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" name="name" id="projectName" class="form-control" placeholder="Nombre del proyecto" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @endsection
 
-@push('css')
-@push('css')
-<!-- FullCalendar CSS -->
-<link href="https://unpkg.com/fullcalendar@6.1.4/main.min.css" rel="stylesheet" />
-@endpush
-
-@push('js')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://unpkg.com/fullcalendar@6.1.4/main.min.js"></script>
-<script>
-  // tu código aquí
-</script>
-@endpush
-
-@endpush
-
 @push('js')
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- FullCalendar JS -->
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
 
 <script>
-$(document).ready(function() {
+$(document).ready(function () {
     let projectModal = new bootstrap.Modal(document.getElementById('projectModal'));
 
-    $('#addProjectBtn').click(() => projectModal.show());
+    $('#addProjectBtn').on('click', function () {
+        projectModal.show();
+    });
 
     function loadProjects() {
-        $.get('/projects/list', function(projects) {
+        $.get('/projects/list', function (projects) {
             let html = '';
             projects.forEach(p => {
-                html += `<li class="list-group-item">${p.name} - creado por ${p.creator.name}</li>`;
+                html += `<li class="list-group-item" draggable="true">${p.name} - creado por ${p.creator.name}</li>`;
             });
             $('#projectsList').html(html);
         });
     }
     loadProjects();
 
-    $('#projectForm').submit(function(e) {
+    $('#projectForm').submit(function (e) {
         e.preventDefault();
         let data = $(this).serialize();
 
-        $.post('/projects', data, function(res) {
+        $.post('/projects', data, function (res) {
             alert(res.message);
             projectModal.hide();
             $('#projectForm')[0].reset();
@@ -99,19 +85,65 @@ $(document).ready(function() {
         }).fail(() => alert('Error al crear proyecto'));
     });
 
-    // Inicializar FullCalendar
-    let calendarEl = document.getElementById('calendar');
-    let calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        locale: 'es',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        events: [] // Puedes cargar eventos vía AJAX más adelante
-    });
-    calendar.render();
+
+        $(document).ready(function() {
+
+            var SITEURL = "{{ url('/') }}";
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });           
+
+            var calendar = $('#calendar').fullCalendar({
+                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+                    'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                ],
+                header: {
+                    left: 'prev',
+                    center: 'title,today',
+                    right: 'next'
+                },
+                buttonText: {
+                    today: 'HOY',
+                    day: 'DIA',
+                    week: 'SEMANA',
+                    month: 'MES'
+                },
+                
+                firstDay: 1,
+                editable: true,
+                displayEventTime: true,
+                events: SITEURL + "/fullcalender",
+                displayEventTime: false,
+                editable: true,
+                events: [
+                ],
+                editable: false,
+                selectable: true,
+                selectHelper: true,               
+
+                dayClick: function( date, jsEvent, view){               
+
+                    //date=moment(date).format("dddd DD [de] MMMM");  
+                    
+                    //$request->session()->flash('FechaSeleccionada', date);
+
+                    $('#fullcalendarModal .modal-title').text(date); 
+
+                    $('#fullcalendarModal').modal('show');                         
+                                        
+                },
+
+                eventClick: function(event) {
+                    location.href = 'showThatActivity/' + event.id;
+                }
+
+            });
+
+        });
 });
 </script>
 @endpush
