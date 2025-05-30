@@ -228,11 +228,19 @@ $(function () {
         $.get('/projects/list', function (projects) {
             let html = '';
             projects.forEach(p => {
+                let createdAt = new Date(p.created_at);
+                const formattedDate = createdAt.toLocaleString('es-ES', {
+                    dateStyle: 'medium',
+                    timeStyle: 'short'
+                });
                 html += `<li class="list-group-item bg-gradient-warning fc-event" 
                             data-event='{"title":"${p.name}"}' 
                             data-project-id="${p.id}"
                             style="cursor: move; margin-bottom: 5px;">
-                            ${p.name} - creado por ${user.name} -
+                            <div style="display: flex; flex-direction: column; align-items: space-between;">
+                                <div>${p.name} - creado por ${p.creator.name} </div> 
+                                <div> ${formattedDate} </div>
+                            </div>
                          </li>`;
             });
             $('#projectsList').html(html);

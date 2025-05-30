@@ -29,10 +29,23 @@ class ProjectController extends Controller
     public function list()
     {
         $projects = Project::with('creator')
-                    ->orderByDesc('last_used_at')
-                    ->get();
+                ->join('users', 'projects.created_by_user_id', '=', 'users.id')
+                ->orderBy('projects.created_at', 'asc')
+                ->orderBy('users.name')
+                ->select('projects.*')
+                ->get();
 
-                    dd($projects);
+        $projects = $projects->map(function($project) {
+            return [
+                'id' => $project->id,
+                'name' => $project->name,
+                'creator' => [
+                    'name' => $project->creator->name ?? 'Desconocido',
+                ],
+                'created_at' => $project->created_at->toIso8601String(),
+                'last_used_at' => $project->last_used_at ? $project->last_used_at->toIso8601String() : null,
+            ];
+        });
     
         return response()->json($projects);
     }
