@@ -1,61 +1,107 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SIMJ
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Descripción
 
-## About Laravel
+SIMJ (Sistema de Información para la Gestión de Proyectos) es una aplicación web orientada a la gestión y seguimiento de tareas asociadas a distintos proyectos. Está diseñada para facilitar la organización de actividades por usuario y la generación de reportes detallados en PDF.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Funcionalidades principales
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   Gestión de proyectos (creación vía modal, solo para administradores)
+-   Listado dinámico de proyectos, ordenado por fecha de uso (con recarga automática vía AJAX)
+-   Calendario interactivo con funcionalidad de drag-and-drop para asignar tareas
+-   Visualización personalizada de tareas por usuario
+-   Carga dinámica de tareas según el usuario seleccionado
+-   Generación de informes en PDF con filtros por proyecto, fecha y usuario
+-   Cálculo de tiempo por tarea y acumulado por proyecto
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Tecnologías usadas
 
-## Learning Laravel
+-   **Vite**: Herramienta moderna para desarrollo y empaquetado frontend (reemplaza Mix)
+-   **Tailwind CSS**: Framework CSS utilitario para estilos rápidos y responsivos
+-   **Bootstrap 5**: Framework CSS clásico para diseño web responsivo
+-   **Sass**: Preprocesador CSS para usar variables, anidamiento, etc.
+-   **Axios**: Cliente HTTP para hacer solicitudes AJAX desde el navegador
+-   **FullCalendar**: Biblioteca JS para mostrar calendarios interactivos
+-   **AdminLTE (Laravel AdminLTE)**: Plantilla de administración lista para usar con Laravel UI
+-   **Laravel DOMPDF**: Generación de PDFs a partir de vistas Blade
+-   **Laravel Tinker**: Consola interactiva para pruebas y manipulación de datos
+-   **Laravel 12**: Framework PHP moderno para desarrollo web
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Requisitos del sistema
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Software base
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-   PHP: ^8.2 (es decir, 8.2 o superior)
+-   Composer: para gestionar dependencias de PHP
+-   Node.js: >=16.x (compatible con Vite 6 y Tailwind CSS)
+-   NPM: para gestionar paquetes frontend
 
-## Laravel Sponsors
+### Base de datos
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+-   MySQL >=5.7 o MariaDB >=10.3  
+    (Asumiendo que usas MySQL, común con Laravel; si usas otra, ajústalo según corresponda)
 
-### Premium Partners
+## Pasos de instalación
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+1. Clona el repositorio
 
-## Contributing
+```bash
+git clone https://github.com/tu-usuario/simj.git
+cd simj
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2. Instala las dependencias de PHP con Composer
 
-## Code of Conduct
+```bash
+composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+3. Copia el archivo .env y genera la clave de la aplicación
 
-## Security Vulnerabilities
+```bash
+cp. env.example .env
+php artisan key:generate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+4. Configura la conexión a la base de datos
+   Edita tu archivo .env y ajusta los siguientes valores:
 
-## License
+```bash
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=simj
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_contraseña
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+5. Ejecuta las migraciones
+
+```bash
+php artisan migrate
+```
+
+6. Instala las dependencias frontend con NPM y compila los assets
+
+```bash
+npm install
+npm run dev
+```
+
+7. Levanta el servidor local
+
+```bash
+php artisan serve
+```
+
+### API interna
+
+El proyecto cuenta con una API interna (no pública) que utiliza AJAX con Axios para funcionalidades como:
+
+-   Carga dinámica de proyectos
+-   Carga de tareas al calendario
+-   Generación de informes
+
+### Autor
+
+José Expósito Ávila

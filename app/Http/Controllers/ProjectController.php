@@ -31,6 +31,8 @@ class ProjectController extends Controller
         $projects = Project::with('creator')
                     ->orderByDesc('last_used_at')
                     ->get();
+
+                    dd($projects);
     
         return response()->json($projects);
     }

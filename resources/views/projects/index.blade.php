@@ -130,9 +130,14 @@
         </div>
     </div>
 
-
 </div>
 @endsection
+
+@section('footer')
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 20px;">
+    <span>2025 <a href="https://solucionesinformaticasmj.com/">Soluciones informáticas MI, S.C.A</a></span>
+</div>
+@stop
 
 @push('js')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -227,7 +232,7 @@ $(function () {
                             data-event='{"title":"${p.name}"}' 
                             data-project-id="${p.id}"
                             style="cursor: move; margin-bottom: 5px;">
-                            ${p.name}
+                            ${p.name} - creado por ${user.name} -
                          </li>`;
             });
             $('#projectsList').html(html);
