@@ -70,6 +70,10 @@
                         <input type="datetime-local" name="start_datetime" id="taskStart" class="form-control" required>
                     </div>
                     <div class="mb-3">
+                        <label for="taskTitle" class="form-label">Título</label>
+                        <input type="text" name="title" id="taskTitle" class="form-control" rows="3" required></input>
+                    </div>
+                    <div class="mb-3">
                         <label for="taskDescription" class="form-label">Texto informativo</label>
                         <textarea name="description" id="taskDescription" class="form-control" rows="3"></textarea>
                     </div>
@@ -314,36 +318,25 @@ $(function () {
                 }
             },
             drop: function(info) {
-                let originalEl = info.draggedEl; 
-    let projectId = originalEl.getAttribute('data-project-id');
-    if (!projectId) {
-        alert('No se pudo identificar el proyecto.');
-        return;
-    }
+                let projectId = info.draggedEl.getAttribute('data-project-id');
+                if (!projectId) {
+                    alert('Debe arrastrar un proyecto válido');
+                    return;
+                }
+                $('#taskProjectId').val(projectId);
+                $('#taskTitle').val(info.draggedEl.innerText.trim());
 
-    $('#projectsList li').each(function() {
-        if ($(this).data('project-id') == projectId) {
-            $(this).remove(); 
-        }
-    });
+                let startDate = new Date(info.date); // fecha arrastrada
 
-    $('#taskProjectId').val(projectId);
-    $('#taskTitle').val(originalEl.innerText.trim());
+                // Fecha inicio formateada a 'YYYY-MM-DDTHH:mm' para input datetime-local
+                let startLocal = startDate.toISOString().slice(0,16);
 
-    let dt = new Date(info.date);
-    let dtEnd = new Date(dt.getTime() + 30*60000);
-    
-    function formatLocalDateTime(date) {
-        const pad = n => n.toString().padStart(2, '0');
-        return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
-    }
+                // Fecha fin = mismo día + 1 hora
+                let endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+                let endLocal = endDate.toISOString().slice(0,16);
 
-    let dtLocalStart = formatLocalDateTime(dt);
-    let dtLocalEnd = formatLocalDateTime(dtEnd);
-
-
-    $('#taskStart').val(dtLocalStart);
-    $('#taskEnd').val(dtLocalEnd);
+                $('#taskStart').val(startLocal);
+                $('#taskEnd').val(endLocal);
 
     taskModal.show();
             },
